@@ -42,7 +42,7 @@ func getS3BucketName() string {
 
 func NewS3Cache(cfg *S3Configuration) (*S3Cache, error) {
 	var baseEndpoint string
-	if cfg.BaseEndpoint == "" {
+	if cfg == nil || cfg.BaseEndpoint == "" {
 		var err error
 		baseEndpoint, err = getS3BaseEndpoint()
 
@@ -67,7 +67,7 @@ func NewS3Cache(cfg *S3Configuration) (*S3Cache, error) {
 	})
 
 	var bucketName string
-	if cfg.BucketName == "" {
+	if cfg == nil || cfg.BucketName == "" {
 		bucketName = getS3BucketName()
 	} else {
 		bucketName = cfg.BucketName

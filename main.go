@@ -20,6 +20,7 @@ type Configuration struct {
 	ClangTidyPath string                     `json:"clang_tidy_path"`
 	GcsConfig     *caches.GcsConfiguration   `json:"gcs,omitempty"`
 	RedisConfig   *caches.RedisConfiguration `json:"redis,omitempty"`
+	S3Config      *caches.S3Configuration    `json:"s3,omitempty"`
 }
 
 func readConfigFile(cfg *Configuration) error {
@@ -257,6 +258,13 @@ func main() {
 	}
 
 	// if no other cache is configured then default to the FS cache
+	if cache == nil {
+		candidate, err := caches.NewS3Cache(cfg.S3Config)
+		if err == nil {
+			cache = candidate
+		}
+	}
+
 	if cache == nil {
 		cache = caches.NewFsCache()
 	}
